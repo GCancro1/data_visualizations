@@ -70,7 +70,13 @@ export default {
     const sphere_geo = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
     
     let sphere = new THREE.Mesh(sphere_geo, material);
-    this.scene.add(sphere);
+    for(let _ in new Range(5)){
+      var newMesh = sphere.clone();
+      newMesh.position.x += 50;
+      this.scene.add(newMesh);
+    }
+
+    // this.scene.add(sphere);
 
 
 
