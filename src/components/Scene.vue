@@ -25,9 +25,9 @@ export default {
     this.sceneCanvas = document.getElementById('three-scene-canvas')
     this.scene = new THREE.Scene()
     this.camera = new THREE.PerspectiveCamera(
-      75,
+      50,
       this.sceneCanvas.getBoundingClientRect().width / this.sceneCanvas.getBoundingClientRect().height,
-      0.1,
+      1,
       1000
     )
     this.camera.position.set(15, 5, 15)
@@ -60,27 +60,33 @@ export default {
     this.scene.add(light)
     // Adding a cube
     let geometry = new THREE.BoxGeometry()
-    let material = new THREE.MeshPhysicalMaterial({color: 0x00ff00})
+    let material = new THREE.MeshBasicMaterial({color:  0xadd8e6})
     let cube = new THREE.Mesh(geometry, material)
-    this.scene.add(cube)
+    // this.scene.add(cube)
 
-    const radius =  6.3;    
-    const widthSegments = 29;  
-    const heightSegments = 24;  
+    const radius = 1;    
+    const widthSegments = 32;  
+    const heightSegments = 16;  
     const sphere_geo = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
     
     let sphere = new THREE.Mesh(sphere_geo, material);
-    for(let _ in new Range(5)){
+
+
+    for(let i = 0; i < 6; i++){
       var newMesh = sphere.clone();
-      newMesh.position.x += 50;
+      newMesh.position.x += 1 + (i*4);
+      newMesh.rotation.x = 1;
+      newMesh.rotation.y = 1;
       this.scene.add(newMesh);
+      console.log("adding new mesh at ", newMesh.position.x)
     }
 
+    console.log("test")
     // this.scene.add(sphere);
+    this.resizeCanvas();
 
+    
 
-
-    this.animateThreeJs()
     
     window.addEventListener("resize", () => {
       this.resizeCanvas()
