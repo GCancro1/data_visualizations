@@ -32,12 +32,12 @@ export default class Life {
 
     transition_tile(row, col, step_board){
         if(step_board[row][col] == LIVING){
-            console.log("Coming back to life at:", row, col);
+            // console.log("Coming back to life at:", row, col);
             // anything with living transition goes here
             return 1;
         }
         else if(step_board[row][col] == DYING){
-            console.log("Dying at:", row, col);
+            // console.log("Dying at:", row, col);
             // anything with dying transition goes here
             return 0;
         }
