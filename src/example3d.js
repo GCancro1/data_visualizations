@@ -1,8 +1,6 @@
 import Life from './gameOfLife.js'
-// import * as THREE from '../node_modules/three/build/three.module.js';
-
-// import * as THREE from "https://cdn.skypack.dev/three"
-
+import * as THREE from '../node_modules/three/build/three.module.js';
+// import {Interaction} from '../node_modules/three.interaction/build/three.interaction.module.js'
 
 const WAIT = 500;
 
@@ -86,14 +84,16 @@ function build_scene(board){
     renderer.shadowMap.autoUpdate = false
     renderer.shadowMap.needsUpdate = true
 
-
+    // var controls = new OrbitControls(this.camera, this.renderer.domElement)
+    // controls.addEventListener('change', this.animateThreeJs )
+    // document.body.appendChild(renderer.domElement);
 
     var group = new THREE.Group()
 
     group = build_group(group, board)
-    // var live_group = group.clone()
+    var live_group = new THREE.Group();
     // scene.add(live_group);
-    scene.add(group);
+    // scene.add(group);
     const size = 10;
     const divisions = 22;
     // console.log(group.children[0]["material"])
@@ -108,7 +108,7 @@ function build_scene(board){
             id = requestAnimationFrame(render);
             // console.log("done sleeping")
         }, WAIT);
-
+        var liveTiles = [];
         for(let s in group.children){
             let i = parseInt(s);
             let c = i % board[0].length
@@ -116,14 +116,20 @@ function build_scene(board){
             
             if(board[r][c] == 1) {
                 group.children[i]["material"] = liveMesh;
+                liveTiles.push(group.children[i].clone());
+                live_group.add(group.children[i].clone());
                 // live_group.add(group.children[i])
             }
             else 
                 group.children[i]["material"] = mesh
                 
         }   
-        // console.log(live_group);
-        scene.remove(group)
+        console.log(liveTiles);
+        // for(let t of liveTiles){
+        //     live_group.add(t.clone())
+        // }
+        scene.remove(live_group)
+        
         var life = new Life(board)
         var new_life = life.next_state();
         board = new_life.board;
@@ -133,11 +139,16 @@ function build_scene(board){
             cancelAnimationFrame(id);
             return;
         }
-
-        scene.add(group)
+  
+        scene.add(live_group)
+        // scene.add(group)
+        live_group = new THREE.Group();
+        liveTiles = []
+ 
         
-        group.rotation.x += .001;
-        group.rotation.y += .002;
+        
+        live_group.rotation.x += .005;
+        live_group.rotation.y += .005;
         // group.rotation.z += .005;
         renderer.render( scene, camera )
         // cancelAnimationFrame(id);

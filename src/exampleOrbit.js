@@ -1,10 +1,10 @@
 import Life from './gameOfLife.js'
 // import * as THREE from '../node_modules/three/build/three.module.js';
 
-// import * as THREE from "https://cdn.skypack.dev/three"
+import * as THREE from "https://cdn.skypack.dev/three"
 
-
-const WAIT = 500;
+import { OrbitControls } from "https://cdn.skypack.dev/three/examples/jsm/controls/OrbitControls.js";
+const WAIT = 300;
 
 function init_Life(board){
     var life = new Life(board);
@@ -59,6 +59,8 @@ function build_scene(board){
         emissive: 0x404040
     });
 
+    
+
     // camera
     var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 8, 7);
@@ -86,7 +88,9 @@ function build_scene(board){
     renderer.shadowMap.autoUpdate = false
     renderer.shadowMap.needsUpdate = true
 
-
+    var controls = new OrbitControls(camera, renderer.domElement)
+    controls.addEventListener('change', quick_render)
+    // document.body.appendChild(renderer.domElement);
 
     var group = new THREE.Group()
 
@@ -101,6 +105,16 @@ function build_scene(board){
     const gridHelper = new THREE.GridHelper( size, divisions );
     // scene.add( gridHelper );
 
+    // var domEvents  = new THREEx.DomEvents(camera, renderer.domElement)
+    // domEvents.addEventListener(mesh, 'click', function(event){
+    //     console.log('you clicked on the mesh')
+    // }, false)
+
+    function quick_render() {
+        console.log("orbit render");
+        renderer.render( scene, camera );
+    }
+
     function render() {
         // console.log("rendered")
         var id;
@@ -108,6 +122,7 @@ function build_scene(board){
             id = requestAnimationFrame(render);
             // console.log("done sleeping")
         }, WAIT);
+        // id = requestAnimationFrame(render);
 
         for(let s in group.children){
             let i = parseInt(s);
@@ -136,9 +151,9 @@ function build_scene(board){
 
         scene.add(group)
         
-        group.rotation.x += .001;
-        group.rotation.y += .002;
-        // group.rotation.z += .005;
+        group.rotation.x += .0005;
+        group.rotation.y += .001;
+        group.rotation.z += .0005;
         renderer.render( scene, camera )
         // cancelAnimationFrame(id);
     }
@@ -148,7 +163,7 @@ function build_scene(board){
         camera.updateProjectionMatrix();
         renderer.setSize( window.innerWidth, window.innerHeight );
     }, false );
-
+    // console.log("noraml render", renderer)
     render();
     return scene;
 }

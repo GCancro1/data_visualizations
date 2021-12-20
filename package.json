@@ -11,6 +11,7 @@
     "core-js": "^3.6.5",
     "orbit-controls-es6": "^2.0.1",
     "three": "^0.134.0",
+    "three.interaction": "^0.2.3",
     "vue": "^2.6.11"
   },
   "devDependencies": {
